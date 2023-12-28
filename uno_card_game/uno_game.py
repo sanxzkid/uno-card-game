@@ -4,26 +4,21 @@ import os
 
 
 class UnoGame:
-    def __init__(self):
-        self.initial_hand_size = 5
+    def __init__(self, hand_size, players_size):
+        self.initial_hand_size = hand_size
         self.orientation = "CW"
         self.show_option = "row-options"
         self.error = ""
         self.uno_deck = UnoDeck()
         self.deck = self.uno_deck.shuffle()
-        self.players = self.create_players(5)
-        self.current_player_idx = 0
+        self.players = self.create_players(players_size)
+        self.player_idx = 0
+        self.player_hand = None
         self.top_card = self.deck.pop(0)
         
     def start(self):
         while True:
-            os.system('cls' if os.name == 'nt' else 'clear')
-            self.show_header()
-            
-            print(f"\nTop Card\n{self.top_card}")
-            current_player = self.players[self.current_player_idx]
-            
-            self.show_cards(f"Player {self.current_player_idx + 1} cards", current_player.hand)
+            self.refresh_screen()
             
             self.show_error()
             selected_card = input("Buy (b) | Pass (p) | Choose one card: ").upper()
@@ -32,59 +27,61 @@ class UnoGame:
                 self.next_player()
             elif selected_card == "B":
                 self.buy(1)
-            elif not selected_card.isdigit() or int(selected_card) not in range(1, len(current_player.hand) + 1):
-                self.error = "Invalid Option"
-            elif int(selected_card) not in range(1, len(current_player.hand) + 1):
-                self.error = "Invalid Option"
-            elif current_player.hand[int(selected_card) - 1].color != None and current_player.hand[int(selected_card) - 1].type != self.top_card.type and current_player.hand[int(selected_card) - 1].color != self.top_card.color:
+            elif not selected_card.isdigit():
+                self.error = "Invalid Option, only digits"
+            elif int(selected_card) not in range(1, len(self.player_hand) + 1):
+                self.error = f"Invalid Option, out of range [1] to [{len(self.player_hand) + 1}]"
+            elif self.player_hand[int(selected_card) - 1].color != None and self.player_hand[int(selected_card) - 1].type != self.top_card.type and self.player_hand[int(selected_card) - 1].color != self.top_card.color:
                 self.error = "Invalid Card, should have same color or same type"
             else:
-                print(current_player.hand[int(selected_card) - 1])
-                self.top_card = current_player.hand.pop(int(selected_card) - 1)
+                print(self.player_hand[int(selected_card) - 1])
+                self.top_card = self.player_hand.pop(int(selected_card) - 1)
                 
-                if len(current_player.hand) == 0:
+                if len(self.player_hand) == 0:
                     print("WINNER")
                     return
                 
                 if self.top_card.color == None:
-                    self.change_color(self.top_card)
-                
+                    self.change_color()
                 if self.top_card.type == "🔄":
                     self.invert()
                     
                 self.next_player()
-                    
+                
                 if self.top_card.type == "+4":
                     self.buy(4)
                 elif self.top_card.type == "+2":
                     self.buy(2)
                 elif self.top_card.type == "❌":
                     self.next_player()
+                    
+                self.waiting_screen()
+
         
     def create_players(self, quantity):
         players = []
-        for i in range(0,quantity - 1):
+        for i in range(0, quantity):
             players.append(UnoPlayer(f"Player { i + 1 }", 0, self.deck[0: self.initial_hand_size]))
             del self.deck[0: self.initial_hand_size]
         return players
 
-    def change_color(self, top_card):
+    def change_color(self):
         while True:
+            self.refresh_screen()
             self.show_cards("Colors", self.uno_deck.deck_colors)
+            self.show_error()
             selected_color = input("Choose one color: ")
             if not selected_color.isdigit():
-                print("Invalid Option")
-                print(f"\nTop Card\n{top_card}")
+                self.error = "Invalid Option, only digits"
             elif int(selected_color) not in range(1, 5):
-                print("Invalid Option")
-                print(f"\nTop Card\n{top_card}")
+                self.error = "Invalid Option, out of range [1] to [4]"
             else:
                 self.top_card.color = self.uno_deck.deck_colors[int(selected_color) - 1].color
                 break
 
     def buy(self, quantity):
         for i in range(quantity):
-            self.players[self.current_player_idx].hand.append(self.deck.pop(0))
+            self.player_hand.append(self.deck.pop(0))
 
     def invert(self):
         if self.orientation == "CW":
@@ -94,16 +91,30 @@ class UnoGame:
 
     def next_player(self):
         if self.orientation == "CW":
-            if self.current_player_idx < len(self.players) - 1:
-                self.current_player_idx += 1
+            if self.player_idx < len(self.players) - 1:
+                self.player_idx += 1
             else:
-                self.current_player_idx = 0
+                self.player_idx = 0
         if self.orientation == "CCW":
-            if self.current_player_idx == 0:
-                self.current_player_idx = len(self.players) - 1
+            if self.player_idx == 0:
+                self.player_idx = len(self.players) - 1
             else:
-                self.current_player_idx -= 1
-                
+                self.player_idx -= 1
+         
+    def refresh_screen(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.show_header()
+        print(f"\nTop Card\n{self.top_card}")
+        self.player_hand = self.players[self.player_idx].hand
+        self.show_cards(f"Player {self.player_idx + 1} cards", self.player_hand)
+        
+    def waiting_screen(self):
+        # os.system('cls' if os.name == 'nt' else 'clear')
+        # self.show_header()
+        # print(f"\nTop Card\n{self.top_card}")
+        # input("Waiting next player ...")
+        pass
+               
     def show_header(self):
         print("------------- Uno Card Game - by sanxzkid -------------")
 
