@@ -7,9 +7,9 @@ class UnoDeck:
         self.deck = []
 
         numbers = range(10)
-        colors = ["red", "blue", "yellow", "green"]
-        actions = ["skip", "revert", "addTwo"]
-        wilds = ["chooseColor", "addFourAndChooseColor"]
+        colors = ["red", "cyan", "yellow", "green"]
+        actions = ["❌", "🔄", "+2"]
+        wilds = ["🎨", "+4"]
 
         for c in colors:
             for n in numbers:
@@ -19,9 +19,6 @@ class UnoDeck:
         for w in wilds:
             for n in range(4):
                 self.deck.append(UnoCard(w, None))
-
-        for c in self.deck:
-            print(c)
 
     def shuffle(self):
         shuffled_deck = self.deck.copy()
