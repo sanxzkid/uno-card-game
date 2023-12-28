@@ -1,22 +1,29 @@
 from uno_card import UnoCard
 import random
 
-class UnoDeck:    
+
+class UnoDeck:
     def __init__(self):
-        self._deck = []
-        self._numbers = range(10)
-        self._colors = ["red", "blue", "yellow", "green"]
-        self._actions = ["skip", "revert", "addTwo"]
-        self._wilds = ["chooseColor", "addFourAndChooseColor"]
-    
-    def start(self):
-        for c in self._colors:
-            for n in self._numbers:
-                self._deck.append(UnoCard(n, c))
-            for a in self._actions:
-                self._deck.append(UnoCard(a, c))
-        for w in self._wilds:
+        self.deck = []
+
+        numbers = range(10)
+        colors = ["red", "blue", "yellow", "green"]
+        actions = ["skip", "revert", "addTwo"]
+        wilds = ["chooseColor", "addFourAndChooseColor"]
+
+        for c in colors:
+            for n in numbers:
+                self.deck.append(UnoCard(n, c))
+            for a in actions:
+                self.deck.append(UnoCard(a, c))
+        for w in wilds:
             for n in range(4):
-                self._deck.append(UnoCard(w, None))
-        random.shuffle(self._deck)
-        return self._deck
+                self.deck.append(UnoCard(w, None))
+
+        for c in self.deck:
+            print(c)
+
+    def shuffle(self):
+        shuffled_deck = self.deck.copy()
+        random.shuffle(shuffled_deck)
+        return shuffled_deck

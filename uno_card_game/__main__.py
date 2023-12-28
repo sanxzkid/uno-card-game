@@ -1,6 +1,3 @@
-from uno_deck import UnoDeck
+from uno_game import UnoGame
 
-deck = UnoDeck().start()
-
-for c in deck:
-    print(c)
+UnoGame()
