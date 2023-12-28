@@ -5,8 +5,13 @@ description = ""
 authors = ["Felipe Sanchez <f.sanxz@gmail.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+start = "python uno_card_game"
+
 [tool.poetry.dependencies]
 python = "^3.10"
+termcolor = "^2.4.0"
+pytest = "^7.4.3"
 
 
 [build-system]
