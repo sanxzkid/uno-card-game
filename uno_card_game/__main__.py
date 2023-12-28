@@ -1,3 +1,3 @@
 from uno_game import UnoGame
 
-UnoGame()
+UnoGame().start()

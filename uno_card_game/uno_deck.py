@@ -10,6 +10,8 @@ class UnoDeck:
         colors = ["red", "cyan", "yellow", "green"]
         actions = ["❌", "🔄", "+2"]
         wilds = ["🎨", "+4"]
+        
+        self.deck_colors = [UnoCard(" ", colors[i]) for i in range(4)]
 
         for c in colors:
             for n in numbers:
