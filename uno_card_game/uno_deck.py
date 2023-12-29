@@ -4,7 +4,7 @@ import random
 
 class UnoDeck:
     def __init__(self):
-        self.deck = []
+        self.deck: list[UnoCard] = []
 
         numbers = range(10)
         colors = ["red", "cyan", "yellow", "green"]
@@ -23,6 +23,4 @@ class UnoDeck:
                 self.deck.append(UnoCard(w, None))
 
     def shuffle(self):
-        shuffled_deck = self.deck.copy()
-        random.shuffle(shuffled_deck)
-        return shuffled_deck
+        random.shuffle(self.deck)

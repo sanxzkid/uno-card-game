@@ -2,7 +2,7 @@ from termcolor import colored
 
 
 class UnoCard:
-    def __init__(self, type, color):
+    def __init__(self, type: str, color: str):
         self.type = type
         self.color = color
 
