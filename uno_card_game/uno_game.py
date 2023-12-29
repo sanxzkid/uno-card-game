@@ -16,7 +16,7 @@ class UnoGame:
         self.dead_deck: list[UnoCard] = []
         self.players = self.create_players(players_size)
         self.player_idx = 0
-        self.player_hand: list[UnoCard] = []
+        self.player_hand: list[UnoCard] = self.players[self.player_idx].hand
         self.top_card = self.deck.pop(0)
 
     def start(self):
@@ -125,13 +125,12 @@ class UnoGame:
                 self.player_idx = len(self.players) - 1
             else:
                 self.player_idx -= 1
+        self.player_hand = self.players[self.player_idx].hand
 
     def refresh_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         self.show_header()
-        # self.show_cards(f"Deck cards", self.deck)
         print(f"\nTop Card\n{self.top_card}")
-        self.player_hand = self.players[self.player_idx].hand
         self.show_cards(f"Player {self.player_idx + 1} cards", self.player_hand)
 
     def waiting_screen(self):
