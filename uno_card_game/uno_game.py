@@ -81,7 +81,7 @@ class UnoGame:
     def create_players(self, quantity: int):
         players = []
         for i in range(0, quantity):
-            players.append(UnoPlayer(f"Player {i + 1}", 0, self.deck[0: self.initial_hand_size]))
+            players.append(UnoPlayer(f"Player {i + 1}", self.deck[0: self.initial_hand_size]))
             del self.deck[0: self.initial_hand_size]
         return players
 

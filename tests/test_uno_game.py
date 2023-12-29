@@ -40,10 +40,11 @@ def test_change_color(mock_input):
 
 # Test the buy method
 def test_buy():
-    game = UnoGame(hand_size=7, players_size=4)
+    hand_size = 7
+    game = UnoGame(hand_size, players_size=4)
     initial_deck_size = len(game.deck)
     game.buy(1)
-    assert len(game.player_hand) == 1
+    assert len(game.player_hand) == hand_size + 1
     assert len(game.deck) == initial_deck_size - 1
 
 
