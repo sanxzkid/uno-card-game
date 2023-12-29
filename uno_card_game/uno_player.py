@@ -1,5 +1,4 @@
 class UnoPlayer:
-    def __init__(self, name, score, hand):
+    def __init__(self, name, hand):
         self.name = name
-        self.score = score
         self.hand = hand
